@@ -13,17 +13,17 @@ FINAL_COLS = [
     ,"COLONIA"
     ,"CP"
     ,"ALCMUN_ASP"
-    ,"EXPL_ASI"
-    ,"NGLOBAL"
-    ,"COPC_ASI"
-    ,"NOPC_ASI"
+    ,"EXPL_RESULTADO"
+    ,"RESULTADO"
+    ,"CVE_ESC_ASI"
+    # ,"NOPC_ASI"
     ,"PROMEDIO"
-    ,"CVE_OPC"
-    ,"NOM_ALCMUN"
-    ,"INSTITU"
+    ,"CVE_OPCION"
+    ,"NOMBRE_MUNICIPIO"
+    ,"INSTITUCION"
     ,"PLANTEL"
     ,"DOMICILIO"
-    ,"NOM_CORTO"
+    ,"NOMBRE_RECORTADO"
     ,"Modo_Transporte"
     ,"Tiempo_en_Min"
     ,"Tiempo_Estimado_Arribo"
@@ -109,7 +109,7 @@ def execution_proccess(since_question):
         
         # Get data from Schools
         dfSchool = pd.read_csv(f"data/Schools.csv", sep="|", encoding="utf-8")    
-        dfSchoolReqCols = dfSchool[["CVE_OPC","NOM_ALCMUN","INSTITU","PLANTEL","DOMICILIO","NOM_CORTO"]]
+        dfSchoolReqCols = dfSchool[["CVE_OPCION","NOMBRE_MUNICIPIO","INSTITUCION","PLANTEL","DOMICILIO","NOMBRE_RECORTADO"]]
         dfSchoolReqCols.to_csv("ScholsRequiredCols.csv",sep="|", encoding="utf-8", index=False)
         print("Schools with required columns created")
         
@@ -152,7 +152,7 @@ def execution_proccess(since_question):
         We now read the final approach of Latitude Longitude of COMIPEMS schools
         The idea it to join with the opc_edu to ensure the exact precision of each school.
         """
-        dfLatLogFinal = pd.read_csv("data/ETA_Schools_Final_LatitudeLongitude.csv", sep=",", encoding="utf-8")
+        dfLatLogFinal = pd.read_csv("data/ETA_Schools.csv", sep=",", encoding="utf-8")
         # Merge with original file
         dfLatLogFinal["PLANTEL"] = dfLatLogFinal["PLANTEL"].str.strip()
         dfFinalOpcEdu = pd.merge(dfSchoolReqCols, dfLatLogFinal, how="left", left_on="PLANTEL", right_on="PLANTEL", suffixes=["","_"])
@@ -163,7 +163,7 @@ def execution_proccess(since_question):
         """
         Now we are going to get students from final file obtained of assignement process
         """
-        columns_to_load = ["FOLIO","COLONIA","CP","ALCMUN_ASP","EXPL_ASI","NO_PRES","NGLOBAL","COPC_ASI","NOPC_ASI","PROMEDIO","OPC_ED01"]
+        columns_to_load = ["FOLIO","COLONIA","CP","ALCMUN_ASP","EXPL_RESULTADO","ASISTIO","RESULTADO","CVE_ESC_ASI","PROMEDIO","OPC1"]
         dfAssignedDS = pd.read_csv("data/scoring.csv", sep="|", encoding="utf-8", dtype={"FOLIO":str, "CP":str}, low_memory=False, usecols=columns_to_load)    
         # print("Metro into dataframe")
         #dfAssignedDS["ORIGEN"] = dfAssignedDS["CP"] + " " + dfAssignedDS["ALCMUN_ASP"] + " " + dfAssignedDS["COLONIA"] # va antes la colonia  colinia alcadia/municipio ciudad y estado separado por comas 
@@ -171,9 +171,9 @@ def execution_proccess(since_question):
         """
         We apply some filters to get a section of all universe of students
         """
-        f1 = dfAssignedDS["EXPL_ASI"] == "ASI"
-        f2 = dfAssignedDS["NO_PRES"] == "SP"
-        f3 = dfAssignedDS["NGLOBAL"] >= int(since_question)
+        f1 = dfAssignedDS["EXPL_RESULTADO"] == "ASI"
+        f2 = dfAssignedDS["ASISTIO"] == "SP"
+        f3 = dfAssignedDS["RESULTADO"] >= int(since_question)
         f4 = dfAssignedDS["ALCMUN_ASP"] != "EXTRANJERO"       # We added because address in foreign people ocasionally is blank    
         dfAssigned = dfAssignedDS[f1 & f2  & f3 & f4]
         dfAssigned.to_csv("Assigned_Filtered.csv", sep="|", encoding="utf-8")
@@ -201,7 +201,7 @@ def execution_proccess(since_question):
         """
         Now we have all info in one dataframe we start final phase, we get the final origin field and destination field        
         """
-        dfAssignedSchool = pd.merge(dfFinalSepomex, dfFinalOpcEdu, how="inner", left_on="COPC_ASI", right_on="CVE_OPC", suffixes=["","_"])
+        dfAssignedSchool = pd.merge(dfFinalSepomex, dfFinalOpcEdu, how="inner", left_on="CVE_ESC_ASI", right_on="CVE_OPCION", suffixes=["","_"])
         dfAssignedSchool["ORIGEN"] = dfAssignedSchool["d_asenta"].fillna('').str.strip() + "," + dfAssignedSchool["D_mnpio"].fillna('').str.strip() + "," + dfAssignedSchool["d_ciudad"].fillna('').str.strip() + "," +  dfAssignedSchool["d_codigo"].fillna('').str.strip()
         dfAssignedSchool["KEY_ETA"] = dfAssignedSchool["d_asenta"].fillna('').str.strip() + "_" + dfAssignedSchool["D_mnpio"].fillna('').str.strip() + "_" + dfAssignedSchool["d_ciudad"].fillna('').str.strip() + "_" + dfAssignedSchool["d_codigo"].fillna('').str.strip() + "_" + dfAssignedSchool["Latitud-Longitud Final"].fillna('').str.strip() 
         dfAssignedSchool.to_csv("AllInfoforETA.csv", sep="|", encoding="utf-8", index=False)    
@@ -258,7 +258,7 @@ def po_execution_proccess(since_question):
         
         # Get data from Schools
         dfSchool = pd.read_csv("data/Schools.csv", sep="|", encoding="utf-8")    
-        dfSchoolReqCols = dfSchool[["CVE_OPC","NOM_ALCMUN","INSTITU","PLANTEL","DOMICILIO","NOM_CORTO"]]
+        dfSchoolReqCols = dfSchool[["CVE_OPCION","NOM_ALCMUN","cion","PLANTEL","DOMICILIO","NOM_CORTO"]]
         dfSchoolReqCols.to_csv("ScholsRequiredCols.csv",sep="|", encoding="utf-8", index=False)
         print("Schools with required columns created")
         
@@ -284,7 +284,7 @@ def po_execution_proccess(since_question):
         We now read the final approach of Latitude Longitude of COMIPEMS schools
         The idea it to join with the opc_edu to ensure the exact precision of each school.
         """
-        dfLatLogFinal = pd.read_csv("data/ETA_Schools_Final_LatitudeLongitude.csv", sep=",", encoding="utf-8")
+        dfLatLogFinal = pd.read_csv("data/ETA_Schools.csv", sep=",", encoding="utf-8")
         # Merge with original file
         dfLatLogFinal["PLANTEL"] = dfLatLogFinal["PLANTEL"].str.strip()
         dfFinalOpcEdu = pd.merge(dfSchoolReqCols, dfLatLogFinal, how="left", left_on="PLANTEL", right_on="PLANTEL", suffixes=["","_"])
@@ -295,15 +295,15 @@ def po_execution_proccess(since_question):
         """
         Now we are going to get students from final file obtained of assignement process
         """
-        columns_to_load = ["FOLIO","COLONIA","CP","ALCMUN_ASP","EXPL_ASI","NO_PRES","NGLOBAL","COPC_ASI","NOPC_ASI","PROMEDIO","OPC_ED01"]
+        columns_to_load = ["FOLIO","COLONIA","CP","ALCMUN_ASP","EXPL_RESULTADO","ASISTIO","RESULTADO","CVE_ESC_ASI","PROMEDIO","OPC1"]
         dfAssignedDS = pd.read_csv("data/scoring.csv", sep="|", encoding="utf-8", dtype={"FOLIO":str, "CP":str}, low_memory=False, usecols=columns_to_load)    
 
         """
         We apply some filters to get a section of all universe of students
         """
-        # f1 = dfAssignedDS["EXPL_ASI"] == "ASI"
-        f2 = dfAssignedDS["NO_PRES"] == "SP"
-        f3 = dfAssignedDS["NGLOBAL"] >= int(since_question)
+        # f1 = dfAssignedDS["EXPL_RESULTADO"] == "ASI"
+        f2 = dfAssignedDS["ASISTIO"] == "SP"
+        f3 = dfAssignedDS["RESULTADO"] >= int(since_question)
         f4 = dfAssignedDS["ALCMUN_ASP"] != "EXTRANJERO"       # We added because address in foreign people ocasionally is blank    
         dfAssigned = dfAssignedDS[f2  & f3 & f4]
         dfAssigned.to_csv("Assigned_Filtered.csv", sep="|", encoding="utf-8")
@@ -332,7 +332,7 @@ def po_execution_proccess(since_question):
         Now we have all info in one dataframe we start final phase, we get the final origin field and destination field        
         We merge information base on the first option the student choose
         """
-        dfAssignedSchool = pd.merge(dfFinalSepomex, dfFinalOpcEdu, how="inner", left_on="OPC_ED01", right_on="CVE_OPC", suffixes=["","_"])
+        dfAssignedSchool = pd.merge(dfFinalSepomex, dfFinalOpcEdu, how="inner", left_on="OPC1", right_on="CVE_OPCION", suffixes=["","_"])
         dfAssignedSchool["ORIGEN"] = dfAssignedSchool["d_asenta"].fillna('').str.strip() + "," + dfAssignedSchool["D_mnpio"].fillna('').str.strip() + "," + dfAssignedSchool["d_ciudad"].fillna('').str.strip() + "," +  dfAssignedSchool["d_codigo"].fillna('').str.strip()
         dfAssignedSchool["KEY_ETA"] = dfAssignedSchool["d_asenta"].fillna('').str.strip() + "_" + dfAssignedSchool["D_mnpio"].fillna('').str.strip() + "_" + dfAssignedSchool["d_ciudad"].fillna('').str.strip() + "_" + dfAssignedSchool["d_codigo"].fillna('').str.strip() + "_" + dfAssignedSchool["Latitud-Longitud Final"].fillna('').str.strip() 
         dfAssignedSchool.to_csv("AllInfoforETA.csv", sep="|", encoding="utf-8", index=False)    
