@@ -3,7 +3,7 @@ import pandas as pd
 from utils.time_format import convert_seconds
 
 # Replace with your actual Google Maps API key
-# API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+API_KEY = 'AIzaSyCx2tvT--OYI3VxYVLWlepMdW78XFCsims'
 
 
 # Initialize the Google Maps client

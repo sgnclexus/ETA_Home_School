@@ -1,22 +1,25 @@
-# ETA COMIPEMS PROJECT
+# ETA Home to School PROJECT
 
 ## Table of Contents
 
 - [About](#about)
-- [Getting Started](#GettingStarted)
+- [Getting Started](#getting-started)
 - [Prerequisites](#prerequisites)
-- [Installing and Executions](#iexecution)
+- [Installing and Executions](#installing-and-executions)
 - [Usage](#usage)
 
 ## About <a name = "about"></a>
 
-This project was created to analyze elapsed time arrival from assigned students home to the school they were assigned. 
+This project was created to analyze elapsed time arrival from students' home to the school. Using the Google API Directions we determine the average elapsed time of arrival in the students journey home-school.
 
-## Getting Started <a name = "GettingStarted"></a>
+## Getting Started<a name = "starte"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+The technologies we are using are:
+- API Google Direction
+- Python
+    
 
-## Prerequisites <a name = "prerequisites"></a>
+## Prerequisites <a name = "rerequisites"></a>
 
 To run this project we have used direction api of google maps. In this case you will need to have a google account and at least one project in gcp because you are going to need a api key to execute the api. 
 
@@ -62,6 +65,13 @@ C:\Users\<user>\AppData\Local\Programs\Python\Python311\python -m venv .\venv
 # To activate virtual environment
 .\venv\Scripts\activate
 ```
+
+For Mac
+```
+python3 -m venv venv
+source venv/bin/activate
+```
+
 
 Install requirements 
 ```

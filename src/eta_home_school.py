@@ -108,7 +108,7 @@ def execution_proccess(since_question):
     try:        
         
         # Get data from Schools
-        dfSchool = pd.read_csv("data\OpcEdu.csv", sep="|", encoding="utf-8")    
+        dfSchool = pd.read_csv(f"data/Schools.csv", sep="|", encoding="utf-8")    
         dfSchoolReqCols = dfSchool[["CVE_OPC","NOM_ALCMUN","INSTITU","PLANTEL","DOMICILIO","NOM_CORTO"]]
         dfSchoolReqCols.to_csv("ScholsRequiredCols.csv",sep="|", encoding="utf-8", index=False)
         print("Schools with required columns created")
@@ -152,7 +152,7 @@ def execution_proccess(since_question):
         We now read the final approach of Latitude Longitude of COMIPEMS schools
         The idea it to join with the opc_edu to ensure the exact precision of each school.
         """
-        dfLatLogFinal = pd.read_csv("data\ETA_Schools_Final_LatitudeLongitude.csv", sep=",", encoding="utf-8")
+        dfLatLogFinal = pd.read_csv("data/ETA_Schools_Final_LatitudeLongitude.csv", sep=",", encoding="utf-8")
         # Merge with original file
         dfLatLogFinal["PLANTEL"] = dfLatLogFinal["PLANTEL"].str.strip()
         dfFinalOpcEdu = pd.merge(dfSchoolReqCols, dfLatLogFinal, how="left", left_on="PLANTEL", right_on="PLANTEL", suffixes=["","_"])
@@ -164,7 +164,7 @@ def execution_proccess(since_question):
         Now we are going to get students from final file obtained of assignement process
         """
         columns_to_load = ["FOLIO","COLONIA","CP","ALCMUN_ASP","EXPL_ASI","NO_PRES","NGLOBAL","COPC_ASI","NOPC_ASI","PROMEDIO","OPC_ED01"]
-        dfAssignedDS = pd.read_csv("data\Metro_2024_global.csv", sep="|", encoding="utf-8", dtype={"FOLIO":str, "CP":str}, low_memory=False, usecols=columns_to_load)    
+        dfAssignedDS = pd.read_csv("data/scoring.csv", sep="|", encoding="utf-8", dtype={"FOLIO":str, "CP":str}, low_memory=False, usecols=columns_to_load)    
         # print("Metro into dataframe")
         #dfAssignedDS["ORIGEN"] = dfAssignedDS["CP"] + " " + dfAssignedDS["ALCMUN_ASP"] + " " + dfAssignedDS["COLONIA"] # va antes la colonia  colinia alcadia/municipio ciudad y estado separado por comas 
 
@@ -183,7 +183,7 @@ def execution_proccess(since_question):
         Now we recover info of SEPOMEX (Approach to get the right locations)
         After that we merge info with Assigned students file
         """
-        dfsepomex = pd.read_csv("data\CPdescarga.csv", sep="|", encoding="utf-8", low_memory=False, dtype={"d_codigo":str})
+        dfsepomex = pd.read_csv("data/CPdescarga.csv", sep="|", encoding="utf-8", low_memory=False, dtype={"d_codigo":str})
         dfsepomex["d_asenta"] = dfsepomex["d_asenta"].str.upper().apply(remove_accents)        
         #dfAssignedRigthAddress = pd.merge(dfAssigned, dfsepomex, how="inner", left_on=["CP","COLONIA"], right_on=["d_codigo","d_asenta"])    
         #dfAssignedRigthAddress = pd.merge(dfAssigned, dfsepomex, how="inner", left_on=["CP"], right_on=["d_codigo"])    
@@ -257,7 +257,7 @@ def po_execution_proccess(since_question):
     try:        
         
         # Get data from Schools
-        dfSchool = pd.read_csv("data\OpcEdu.csv", sep="|", encoding="utf-8")    
+        dfSchool = pd.read_csv("data/Schools.csv", sep="|", encoding="utf-8")    
         dfSchoolReqCols = dfSchool[["CVE_OPC","NOM_ALCMUN","INSTITU","PLANTEL","DOMICILIO","NOM_CORTO"]]
         dfSchoolReqCols.to_csv("ScholsRequiredCols.csv",sep="|", encoding="utf-8", index=False)
         print("Schools with required columns created")
@@ -284,7 +284,7 @@ def po_execution_proccess(since_question):
         We now read the final approach of Latitude Longitude of COMIPEMS schools
         The idea it to join with the opc_edu to ensure the exact precision of each school.
         """
-        dfLatLogFinal = pd.read_csv("data\ETA_Schools_Final_LatitudeLongitude.csv", sep=",", encoding="utf-8")
+        dfLatLogFinal = pd.read_csv("data/ETA_Schools_Final_LatitudeLongitude.csv", sep=",", encoding="utf-8")
         # Merge with original file
         dfLatLogFinal["PLANTEL"] = dfLatLogFinal["PLANTEL"].str.strip()
         dfFinalOpcEdu = pd.merge(dfSchoolReqCols, dfLatLogFinal, how="left", left_on="PLANTEL", right_on="PLANTEL", suffixes=["","_"])
@@ -296,7 +296,7 @@ def po_execution_proccess(since_question):
         Now we are going to get students from final file obtained of assignement process
         """
         columns_to_load = ["FOLIO","COLONIA","CP","ALCMUN_ASP","EXPL_ASI","NO_PRES","NGLOBAL","COPC_ASI","NOPC_ASI","PROMEDIO","OPC_ED01"]
-        dfAssignedDS = pd.read_csv("data\Metro_2024_global.csv", sep="|", encoding="utf-8", dtype={"FOLIO":str, "CP":str}, low_memory=False, usecols=columns_to_load)    
+        dfAssignedDS = pd.read_csv("data/scoring.csv", sep="|", encoding="utf-8", dtype={"FOLIO":str, "CP":str}, low_memory=False, usecols=columns_to_load)    
 
         """
         We apply some filters to get a section of all universe of students
@@ -313,7 +313,7 @@ def po_execution_proccess(since_question):
         Now we recover info of SEPOMEX (Approach to get the right locations)
         After that we merge info with Assigned students file
         """
-        dfsepomex = pd.read_csv("data\CPdescarga.csv", sep="|", encoding="utf-8", low_memory=False, dtype={"d_codigo":str})
+        dfsepomex = pd.read_csv("data/CPdescarga.csv", sep="|", encoding="utf-8", low_memory=False, dtype={"d_codigo":str})
         dfsepomex["d_asenta"] = dfsepomex["d_asenta"].str.upper().apply(remove_accents)        
         #dfAssignedRigthAddress = pd.merge(dfAssigned, dfsepomex, how="inner", left_on=["CP","COLONIA"], right_on=["d_codigo","d_asenta"])    
         #dfAssignedRigthAddress = pd.merge(dfAssigned, dfsepomex, how="inner", left_on=["CP"], right_on=["d_codigo"])    
