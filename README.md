@@ -55,7 +55,7 @@ For assigned students
 
 Google Maps
 
-
+![alt text](image-3.png)
 
 For first option selected
 - PO_Trayecto_Casa_Escuela.xlsx
@@ -119,13 +119,11 @@ Project Structure
  ┣ 📂data
  ┃ ┣ 📜CPdescarga.csv
  ┃ ┣ 📜eta_home_school.txt
- ┃ ┣ 📜ETA_Schools_Final_LatitudeLongitude.csv
- ┃ ┣ 📜Metro_2024_global.csv
- ┃ ┗ 📜OpcEdu.csv
+ ┃ ┣ 📜ETA_Schools.csv
+ ┃ ┣ 📜Scoring.csv
+ ┃ ┗ 📜Schools.csv
  ┣ 📂src
- ┃ ┣ 📂utils
- ┃ ┃ ┣ 📂__pycache__
- ┃ ┃ ┃ ┗ 📜Latitude_Longitude.cpython-311.pyc
+ ┃ ┣ 📂utils  
  ┃ ┃ ┣ 📜Latitude_Longitude.py
  ┃ ┃ ┣ 📜string_formatter.py
  ┃ ┃ ┗ 📜time_format.py
@@ -135,6 +133,7 @@ Project Structure
  ┣ 📜FinalFile.csv
  ┣ 📜FinalOpcEdu.csv
  ┣ 📜GetETA.csv
+ ┣ 📜OA_Trayecto_Casa_Escuela.xlsx
  ┣ 📜README.md
  ┣ 📜ScholsRemovingAfter_CP.csv
  ┣ 📜ScholsRequiredCols.csv
