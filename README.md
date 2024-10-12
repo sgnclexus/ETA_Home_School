@@ -115,7 +115,7 @@ python .\src\eta_home_school.py -po 80
 
 Project Structure
 ```
-📦ETA_COMIPEMS
+📦ETA_HOME_SCHOOL
  ┣ 📂data
  ┃ ┣ 📜CPdescarga.csv
  ┃ ┣ 📜eta_home_school.txt
