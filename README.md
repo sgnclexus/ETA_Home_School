@@ -19,7 +19,7 @@ The technologies we are using are:
 - Python
     
 
-## Prerequisites <a name = "rerequisites"></a>
+## Prerequisites <a name = "prerequisites"></a>
 
 To run this project we have used direction api of google maps. In this case you will need to have a google account and at least one project in gcp because you are going to need a api key to execute the api. 
 
